@@ -27,6 +27,8 @@ attributes:
   #     modules: "python/3.5 cuda/8.0.44"
   modules: ""
   bc_account: "kcl"
+  setup_file:
+    label: "Source this setup file"
 
   # Any extra command line arguments to feed to the `jupyter notebook ...`
   # command that launches the Jupyter notebook within the batch job
@@ -48,3 +50,4 @@ form:
   - bc_num_hours
   - bc_num_slots
   - bc_email_on_started
+  - setup_file

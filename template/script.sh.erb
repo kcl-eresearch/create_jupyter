@@ -17,19 +17,19 @@ cd "${HOME}"
 # Purge the module environment to avoid conflicts
 module purge
 
+# Load the require modules
+module load <%= context.modules %>
+
+# List loaded modules
+module list
+<%- end -%>
+
 # Source the setup file
 <%- if setup_file.present? -%>
 echo "Setup file used was:  <%= setup_file %>"
 source "<%= setup_file %>"
 <%- else -%>
 echo "No setup file!  How did that happen?"
-<%- end -%>
-
-# Load the require modules
-module load <%= context.modules %>
-
-# List loaded modules
-module list
 <%- end -%>
 
 # Benchmark info

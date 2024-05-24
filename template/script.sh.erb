@@ -1,5 +1,5 @@
 <%-
-  setup_file = context.setup_file
+  setup_command = context.setup_command
 -%>
 #!/usr/bin/env bash
 
@@ -25,16 +25,20 @@ module list
 <%- end -%>
 
 # Source the setup file
-<%- if setup_file.present? -%>
-echo "Setup file used was:  <%= setup_file %>"
-source "<%= setup_file %>"
+<% source_setup = setup_command.present? ? setup_command : "source /software/ood_apps/jupyterlab/bin/activate" %>
+
+<%- if setup_command.present? -%>
+echo "Setup command given:  <%= setup_command %>"
 <%- else -%>
-echo "No setup file!  How did that happen?"
+echo "No setup command!  Defaulting to: source /software/ood_apps/jupyterlab/bin/activate"
 <%- end -%>
+
+# Run the setup command:
+<%= setup_command %>
 
 # Benchmark info
 echo "TIMING - Starting jupyter at: $(date)"
 
 # Launch the Jupyter Lab Server
 set -x
-/software/ood_apps/jupyterlab/bin/jupyter lab --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>
+jupyter lab --config="${CONFIG_FILE}" <%= context.extra_jupyter_args %>

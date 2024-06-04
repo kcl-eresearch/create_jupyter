@@ -27,8 +27,17 @@ attributes:
   #     modules: "python/3.5 cuda/8.0.44"
   modules: ""
   bc_account: "kcl"
-  setup_file:
-    label: "Source this setup file"
+  num_cores:
+    widget: "number_field"
+    label: "Number of CPU cores"
+    value: 1
+  memory:
+    widget: "number_field"
+    label: "Requested memory (GB)"
+    value: 2
+  setup_command:
+    label: "Run this setup command"
+    help: "This command will be run before the Jupyter notebook is started. It is useful for setting up the virtual environment you want to run your notebook in. Any environment activated here *must* have Jupyter installed."
 
   # Any extra command line arguments to feed to the `jupyter notebook ...`
   # command that launches the Jupyter notebook within the batch job
@@ -47,7 +56,8 @@ form:
   - modules
   - extra_jupyter_args
   - bc_queue
+  - num_cores
+  - memory
   - bc_num_hours
-  - bc_num_slots
   - bc_email_on_started
-  - setup_file
+  - setup_command

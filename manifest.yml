@@ -1,7 +1,7 @@
 ---
-name: Jupyter Lab
+name: Jupyter Lab (Test)
 category: Interactive Apps
 subcategory: Servers
 role: batch_connect
 description: |
-  This app will launch a Jupyter Lab server on one or more nodes.
+  This is a testing environment for improvements made to the Jupyter Lab app.

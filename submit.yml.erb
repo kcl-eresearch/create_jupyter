@@ -34,8 +34,10 @@ batch_connect:
 # Configure the job script submission parameters for the batch job here
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
-#script:
-#  queue_name: "queue1"
-#  accounting_id: "account1"
-#  email_on_started: true
-#  native: # ... array of command line arguments ...
+script:
+  queue_name: <%= bc_queue %>
+  copy_environment: true
+  native: 
+    - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
+    - "--mem=<%= memory.blank? ? "2G" : memory + "G" %>"
+    - "--gres=gpu:<%= bc_queue.include?("gpu") ? "1" : "0" %>"

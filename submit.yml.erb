@@ -2,11 +2,14 @@
 #
 <%-
   if setup_command.present?
-    # Split the setup_command by spaces and take the second part as the path
-    command_path = setup_command.split(' ')[1]
-    # Check if the path is a valid file or directory
-    unless Pathname(command_path).exist?
-      raise "You're trying to execute '#{setup_command}', but the path '#{command_path}' does not exist"
+    # If the first part is source or ., then we check if path is a valid file
+    if setup_command.start_with?('source', '.')
+      # Split the setup_command by spaces and take the second part as the path
+      command_path = setup_command.split(' ')[1]
+      # Check if the path is a valid file or directory
+      unless Pathname(command_path).exist?
+        raise "You're trying to execute '#{setup_command}', but the path '#{command_path}' does not exist"
+      end
     end
   end
 -%>

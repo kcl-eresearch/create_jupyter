@@ -37,8 +37,17 @@ attributes:
     value: 2
   setup_command:
     label: "Run this setup command"
-    help: "This command will be run before the Jupyter notebook is started. It is useful for setting up the virtual environment you want to run your notebook in. Any environment activated here *must* have Jupyter installed."
+    help: |
+      This command will be run before the Jupyter notebook is started.
+      It is useful for setting up the virtual environment you want to run your notebook in.
+      
+      Accepted formats:
+        
+        - `source /<venv-path>/bin/activate`
+        
+        - `conda activate <env-name>`
 
+      **Note:** Ensure that Jupyter is installed in the environment.
   # Any extra command line arguments to feed to the `jupyter notebook ...`
   # command that launches the Jupyter notebook within the batch job
   extra_jupyter_args: ""

@@ -1,7 +1,7 @@
 <%-
   setup_command = context.setup_command
 -%>
-#!/usr/bin/env bash
+#!/bin/bash -l
 
 # Benchmark info
 echo "TIMING - Starting main script at: $(date)"
@@ -24,7 +24,20 @@ module load <%= context.modules %>
 module list
 <%- end -%>
 
-# Source the setup file
+# If the setup command is 'conda activate ...', then we need to do some setup.
+<%- if setup_command.present? && setup_command.start_with?('conda activate') -%>
+echo "Setting up conda environment..."
+echo "Loading module: 'module load anaconda3'"
+module load anaconda3
+module list
+
+# This solution is thanks to: https://discourse.openondemand.org/t/jupyterlab-and-conda-conda-init-fails/3111/6
+echo "Running 'eval ...' here"
+eval "$(conda shell.bash hook)"
+
+<%- end -%>
+
+# Activate env based on setup command (or default)
 <% source_setup = setup_command.present? ? setup_command : "source /software/ood_apps/jupyterlab/bin/activate" %>
 
 <%- if setup_command.present? -%>

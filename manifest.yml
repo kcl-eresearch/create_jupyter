@@ -1,7 +1,7 @@
 ---
-name: Jupyter Lab (Test)
+name: Jupyter Lab
 category: Interactive Apps
 subcategory: Servers
 role: batch_connect
 description: |
-  This is a testing environment for improvements made to the Jupyter Lab app.
+  This app will launch a Jupyter Lab server. If you choose a GPU partition, you will be automatically allocated one GPU.

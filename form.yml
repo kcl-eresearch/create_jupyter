@@ -27,13 +27,35 @@ attributes:
   #     modules: "python/3.5 cuda/8.0.44"
   modules: ""
   bc_account: "kcl"
+  
+  # Restrictions on basic App: choose from the following queues, max 4 hours
+  queue:
+    widget: "select"
+    label: "Partition / Queue"
+    options:
+      - "cpu"
+      - "interruptible_cpu"
+      - "gpu"
+      - "interruptible_gpu"
+      - "biomed_a100_gpu"
+      - "biomed_a30_gpu"
+    value: "interruptible_cpu"
+  bc_num_hours:
+    widget: "number_field"
+    label: "Number of hours"
+    max: 4
+    value: 2
+
+  # Resource restrictions (for basic App): 16 cores, 120GB memory
   num_cores:
     widget: "number_field"
     label: "Number of CPU cores"
+    max: 16
     value: 1
   memory:
     widget: "number_field"
     label: "Requested memory (GB)"
+    max: 120
     value: 2
   setup_command:
     label: "Run this setup command"
@@ -64,7 +86,7 @@ attributes:
 form:
   - modules
   - extra_jupyter_args
-  - bc_queue
+  - queue
   - num_cores
   - memory
   - bc_num_hours

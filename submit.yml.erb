@@ -12,6 +12,19 @@
       end
     end
   end
+
+  # If the queue is one of the restricted ones, only allow up to 4 hours
+  restricted_queues = [
+    "cpu", "interruptible_cpu",
+    "gpu", "interruptible_gpu",
+    "nmes_cpu", "nmes_gpu",
+    "biomed_a100_gpu", "biomed_a30_gpu"
+  ]
+
+  max_hours = 4
+  if restricted_queues.include?(queue) && bc_num_hours.to_i > max_hours
+    raise "When using the #{queue} queue, max time allowed is 4 hours. Please change the requested time."
+  end
 -%>
 ---
 
@@ -38,9 +51,27 @@ batch_connect:
 # @see http://www.rubydoc.info/gems/ood_core/OodCore/Job/Script
 #
 script:
-  queue_name: <%= bc_queue %>
+  queue_name: <%= queue %>
   copy_environment: true
   native: 
     - "--cpus-per-task=<%= num_cores.blank? ? "1" : num_cores %>"
     - "--mem=<%= memory.blank? ? "2G" : memory + "G" %>"
-    - "--gres=gpu:<%= bc_queue.include?("gpu") ? "1" : "0" %>"
+    - "--gres=gpu:<%= num_gpus %>"
+<%-
+  # Set default values if variables are nil
+  gpu_type ||= "any"
+  cpu_arch ||= "any"
+
+  constraints = []
+  constraints << gpu_type if gpu_type != "any"
+  constraints << cpu_arch if cpu_arch != "any"
+
+  if constraints.any?
+    constraint_option = "--constraint=#{constraints.join(',')}"
+  else
+    constraint_option = nil
+  end
+-%>
+<% if constraint_option %>
+    - "<%= constraint_option %>"
+<% end %>

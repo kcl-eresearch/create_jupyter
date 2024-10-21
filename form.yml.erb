@@ -27,6 +27,17 @@ attributes:
   #     modules: "python/3.5 cuda/8.0.44"
   modules: ""
   bc_account: "kcl"
+  queue: 
+    widget: "select"
+    label: "Queue"
+    options:
+<%
+  # Execute sinfo to get queues accessible to the user
+  sinfo_output = `sinfo -h -o '%P'`.split("\n")
+  queues = sinfo_output.map { |line| line.strip }
+  queues.uniq.each do |queue| %>
+      - "<%= queue %>"
+<% end %>
   num_cores:
     widget: "number_field"
     label: "Number of CPU cores"
@@ -35,6 +46,46 @@ attributes:
     widget: "number_field"
     label: "Requested memory (GB)"
     value: 2
+  num_gpus:
+    widget: "number_field"
+    label: "Number of GPUs"
+    value: 0
+    max: 8
+  gpu_type:
+    widget: "select"
+    label: "GPU Model"
+    options:
+      - "any"
+      - "a100"
+      - "a100_80g"
+      - "a100_40g"
+      - "a40"
+      - "a30"
+      - "l40s"
+      - "t4"
+      - "titan_x"
+      - "titan_v"
+      - "titan_rtx"
+      - "titan_xp"
+      - "rtx2070"
+      - "rtx2080"
+      - "rtx3070"
+      - "rtx3090"
+      - "h100"
+    value: "any"
+  cpu_arch:
+    widget: "select"
+    label: "CPU Architecture"
+    options:
+      - "any"
+      - "zen2"
+      - "zen3"
+      - "zen4"
+      - "icelake"
+      - "cascadelake"
+      - "skylake_avx512"
+      - "sapphirerapids"
+    value: "any"
   setup_command:
     label: "Run this setup command"
     help: |
@@ -64,9 +115,12 @@ attributes:
 form:
   - modules
   - extra_jupyter_args
-  - bc_queue
+  - queue
   - num_cores
   - memory
+  - num_gpus
+  - gpu_type
+  - cpu_arch
   - bc_num_hours
   - bc_email_on_started
   - setup_command

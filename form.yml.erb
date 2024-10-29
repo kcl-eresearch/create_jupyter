@@ -34,8 +34,9 @@ attributes:
 <%
   # Execute sinfo to get queues accessible to the user
   sinfo_output = `sinfo -h -o '%P'`.split("\n")
-  queues = sinfo_output.map { |line| line.strip }
-  queues.uniq.each do |queue| %>
+  queues = sinfo_output.map { |line| line.strip.chomp('*') }
+%>
+<% queues.uniq.each do |queue| %>
       - "<%= queue %>"
 <% end %>
   num_cores:

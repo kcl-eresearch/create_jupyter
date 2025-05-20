@@ -12,6 +12,19 @@
       end
     end
   end
+
+  # If the queue is one of the restricted ones, only allow up to 4 hours
+  restricted_queues = [
+    "cpu", "interruptible_cpu",
+    "gpu", "interruptible_gpu",
+    "nmes_cpu", "nmes_gpu",
+    "biomed_a100_gpu", "biomed_a30_gpu"
+  ]
+
+  max_hours = 4
+  if restricted_queues.include?(queue) && bc_num_hours.to_i > max_hours
+    raise "When using the #{queue} queue, max time allowed is 4 hours. Please change the requested time."
+  end
 -%>
 ---
 

@@ -27,24 +27,18 @@ attributes:
   #     modules: "python/3.5 cuda/8.0.44"
   modules: ""
   bc_account: "kcl"
-  
-  # Restrictions on basic App: choose from the following queues, max 4 hours
-  queue:
+  queue: 
     widget: "select"
-    label: "Partition / Queue"
+    label: "Queue"
     options:
-      - "cpu"
-      - "interruptible_cpu"
-      - "gpu"
-      - "interruptible_gpu"
-      - "biomed_a100_gpu"
-      - "biomed_a30_gpu"
-    value: "interruptible_cpu"
-  bc_num_hours:
-    widget: "number_field"
-    label: "Number of hours"
-    max: 4
-    value: 2
+<%
+  # Execute sinfo to get queues accessible to the user
+  sinfo_output = `sinfo -h -o '%P'`.split("\n")
+  queues = sinfo_output.map { |line| line.strip.chomp('*') }
+%>
+<% queues.uniq.each do |queue| %>
+      - "<%= queue %>"
+<% end %>
 
   # Resource restrictions (for basic App): 16 cores, 120GB memory
   num_cores:

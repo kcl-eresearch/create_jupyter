@@ -46,8 +46,19 @@ echo "Setup command given:  <%= setup_command %>"
 echo "No setup command!  Defaulting to: source /software/ood_apps/jupyterlab/bin/activate"
 <%- end -%>
 
-# Run the setup command:
+# Run the setup command with timing:
+echo "TIMING - Starting setup command at: $(date)"
+setup_start_time=$(date +%s)
 <%= source_setup %>
+setup_end_time=$(date +%s)
+setup_duration=$((setup_end_time - setup_start_time))
+echo "TIMING - Setup command completed in ${setup_duration} seconds"
+
+# Debug info: Print python executable information
+echo "DEBUG - Python executable information:"
+echo "Python path: $(which python)"
+python --version 2>&1 | head -1 || echo "Could not get Python version"
+echo "DEBUG - End python information"
 
 # Benchmark info
 echo "TIMING - Starting jupyter at: $(date)"

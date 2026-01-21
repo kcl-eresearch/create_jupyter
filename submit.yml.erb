@@ -58,19 +58,8 @@ script:
     - "--mem=<%= memory.blank? ? "2G" : memory + "G" %>"
     - "--gres=gpu:<%= num_gpus %>"
 <%-
-  # Set default values if variables are nil
-  gpu_type ||= "any"
-  cpu_arch ||= "any"
-
-  constraints = []
-  constraints << gpu_type if gpu_type != "any"
-  constraints << cpu_arch if cpu_arch != "any"
-
-  if constraints.any?
-    constraint_option = "--constraint=#{constraints.join(',')}"
-  else
-    constraint_option = nil
-  end
+  features = [gpu_type, cpu_arch].reject { |v| v == "any" }
+  constraint_option = features.empty? ? nil : "--constraint=#{features.join('&')}"
 -%>
 <% if constraint_option %>
     - "<%= constraint_option %>"
